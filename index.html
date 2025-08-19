@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7th Grade American History - Vocabulary Library</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -11,30 +11,73 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f1724; /* darker track to match sidebar */
+            background: #1f2937; /* bg-gray-800 */
         }
         ::-webkit-scrollbar-thumb {
-            background: #334155; /* thumb */
+            background: #4b5563; /* bg-gray-600 */
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: #6b7280; /* bg-gray-500 */
+        }
+        /* Styles for printing the word wall */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #main-content, #main-content * {
+                visibility: visible;
+            }
+            #main-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .word-wall-card {
+                page-break-inside: avoid;
+                border: 2px solid #000 !important;
+            }
+            .word-wall-card img {
+                max-width: 100%;
+            }
+        }
+        /* Loading Spinner */
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="bg-slate-900 font-sans text-slate-100">
+<body class="bg-gray-900 font-sans">
 
     <div class="flex h-screen">
         <!-- Sidebar for Unit Navigation -->
-        <nav id="sidebar" class="w-64 bg-slate-800 text-slate-100 p-6 flex-shrink-0">
-            <h1 class="text-2xl font-extrabold mb-8">U.S. History</h1>
-            <ul id="unit-list" class="space-y-2" role="list">
+        <nav id="sidebar" class="w-64 bg-gray-800 text-white p-4 flex-shrink-0 flex flex-col">
+            <h1 class="text-2xl font-bold mb-6">U.S. History</h1>
+            <ul id="unit-list" class="flex-grow">
                 <!-- Unit buttons will be inserted here by JavaScript -->
             </ul>
+            <div class="space-y-2">
+                 <button id="word-wall-btn" class="w-full text-left p-3 rounded-lg transition-colors duration-200 bg-green-600 hover:bg-green-700 font-bold">
+                    Word Wall (No Images)
+                </button>
+                <button id="ai-word-wall-btn" class="w-full text-left p-3 rounded-lg transition-colors duration-200 bg-blue-600 hover:bg-blue-700 font-bold">
+                    Generate Word Wall with AI Images
+                </button>
+            </div>
         </nav>
 
         <!-- Main Content Area to Display Vocabulary -->
-        <main id="main-content" class="flex-1 p-10 overflow-y-auto">
+        <main id="main-content" class="flex-1 p-8 overflow-y-auto">
             <!-- Vocabulary content will be inserted here by JavaScript -->
         </main>
     </div>
@@ -44,55 +87,34 @@
         const vocabularyData = {
           "Unit 1": {
             title: "Unit 1: Creating a New Nation",
-            summary: "This unit covers the foundational conflicts, ideas, and documents that led to the formation of the United States, from colonial grievances to the ratification of the Constitution[...]
+            summary: "This unit covers the foundational conflicts, ideas, and documents that led to the formation of the United States, from colonial grievances to the ratification of the Constitution.",
             sections: [
               {
                 sectionTitle: "Causes of the American Revolution",
                 terms: [
-                  { term: "Salutary Neglect", partOfSpeech: "Noun", definition: "The unofficial British policy where rules and laws were not strictly enforced on the American colonies.", context: "Sal[...]
-                  { term: "Mercantilism", partOfSpeech: "Noun", definition: "An economic system where colonies provide raw materials to the mother country, which then produces and sells finished goods[...]
-                  { term: "Colony", partOfSpeech: "Noun", definition: "An area or region controlled and settled by people from another country.", context: "The 13 colonies were established on the east[...]
-                  { term: "Self-government", partOfSpeech: "Noun", definition: "The ability of people to rule themselves and make their own laws.", context: "Colonists believed they had a right to sel[...]
-                  { term: "Assembly", partOfSpeech: "Noun", definition: "A group of representatives who gather to make laws.", context: "The Virginia House of Burgesses was the first colonial assembly[...]
-                  { term: "Boycott", partOfSpeech: "Verb/Noun", definition: "To refuse to buy, use, or participate in something as a form of protest.", context: "Colonists organized a boycott of Briti[...]
-                  { term: "Tax (Tariff)", partOfSpeech: "Noun", definition: "Money that people are required to pay to support the workings of the government.", context: "The Stamp Act was a tax on all[...]
-                  { term: "No Taxation Without Representation", partOfSpeech: "Phrase", definition: "The slogan used by colonists to express that they should not be taxed by a government in which they[...]
-                  { term: "Smuggling", partOfSpeech: "Noun", definition: "The act of secretly and illegally moving goods to avoid paying taxes.", context: "Many colonists resorted to smuggling to get [...]
-                  { term: "Sons of Liberty", partOfSpeech: "Noun", definition: "A group of American colonists, led by Samuel Adams, who opposed British taxation through protests and boycotts.", contex[...]
-                  { term: "Blockade", partOfSpeech: "Noun", definition: "The act of using military force to prevent a country or region from receiving supplies or communicating.", context: "The Britis[...]
-                  { term: "Monopoly", partOfSpeech: "Noun", definition: "Total control of a market for a certain product.", context: "The Tea Act gave the British East India Company a monopoly on tea [...]
-                  { term: "Patriot", partOfSpeech: "Noun", definition: "An American colonist who favored independence from Great Britain.", context: "Patriots like Samuel Adams and Patrick Henry were [...]
-                  { term: "Loyalist", partOfSpeech: "Noun", definition: "An American colonist who remained loyal to Great Britain and opposed independence.", context: "Many Loyalists fled to Canada or[...]
-                  { term: "Militia", partOfSpeech: "Noun", definition: "A volunteer army of citizens who are not professional soldiers but are trained to fight in emergencies.", context: "The colonial[...]
-                  { term: "Stamp Act", partOfSpeech: "Noun", definition: "A 1765 law passed by Parliament that required a tax on all legal and commercial documents in the colonies.", context: "The Sta[...]
-                  { term: "Quartering Act", partOfSpeech: "Noun", definition: "A law that required American colonists to provide housing and supplies for British soldiers.", context: "The Quartering A[...]
+                  { term: "Salutary Neglect", partOfSpeech: "Noun", definition: "The unofficial British policy where rules and laws were not strictly enforced on the American colonies.", context: "Salutary neglect allowed the colonies to develop a strong sense of self-government." },
+                  { term: "Mercantilism", partOfSpeech: "Noun", definition: "An economic system where colonies provide raw materials to the mother country, which then produces and sells finished goods back to the colonies.", context: "The goal of mercantilism was to make the mother country, Great Britain, wealthy and powerful." },
+                  { term: "Boycott", partOfSpeech: "Verb/Noun", definition: "To refuse to buy, use, or participate in something as a form of protest.", context: "Colonists organized a boycott of British tea to protest the tax." },
+                  { term: "Tax (Tariff)", partOfSpeech: "Noun", definition: "Money that people are required to pay to support the workings of the government.", context: "The Stamp Act was a tax on all paper goods in the colonies." },
+                  { term: "Sons of Liberty", partOfSpeech: "Noun", definition: "A group of American colonists, led by Samuel Adams, who opposed British taxation through protests and boycotts.", context: "The Sons of Liberty played a key role in organizing the Boston Tea Party." },
+                  { term: "Militia", partOfSpeech: "Noun", definition: "A volunteer army of citizens who are not professional soldiers but are trained to fight in emergencies.", context: "The colonial militia, including the Minutemen, played a crucial role in the early battles of the Revolution." },
                 ]
               },
               {
                 sectionTitle: "Declaration of Independence",
                 terms: [
-                  { term: "Natural Rights", partOfSpeech: "Noun", definition: "Rights that all people are born with and that cannot be taken away, such as life, liberty, and property.", context: "The [...]
-                  { term: "Unalienable", partOfSpeech: "Adjective", definition: "Describes rights that cannot be taken away or denied.", context: "The Declaration states that all people have unalienab[...]
-                  { term: "Consent", partOfSpeech: "Noun", definition: "Permission for something to happen or an agreement to do something.", context: "A just government gets its power from the consen[...]
+                  { term: "Natural Rights", partOfSpeech: "Noun", definition: "Rights that all people are born with and that cannot be taken away, such as life, liberty, and property.", context: "The Declaration of Independence is based on the idea of natural rights." },
                   { term: "Tyranny", partOfSpeech: "Noun", definition: "Cruel and oppressive government or rule.", context: "The colonists accused King George III of tyranny." },
-                  { term: "Despotism", partOfSpeech: "Noun", definition: "A form of government where a single ruler has absolute power, often in a cruel way.", context: "The Declaration of Independenc[...]
-                  { term: "Usurpation", partOfSpeech: "Noun", definition: "The act of wrongfully taking someone's power or rights by force.", context: "The colonists viewed the new British laws as a u[...]
                 ]
               },
               {
                 sectionTitle: "Articles of Confederation & Constitution",
                 terms: [
-                    { term: "Articles of Confederation", partOfSpeech: "Noun", definition: "The first constitution of the United States, which created a weak central government.", context: "Under the [...]
-                    { term: "Confederation", partOfSpeech: "Noun", definition: "A union of states where most political power is retained by the states, with a weak central authority.", context: "The U[...]
-                    { term: "Unicameral Legislature", partOfSpeech: "Noun", definition: "A legislative body with only one house or chamber.", context: "The Articles of Confederation created a unicamer[...]
-                    { term: "Ratification", partOfSpeech: "Noun", definition: "The official act of signing or voting for an agreement to make it official.", context: "The ratification of the Articles [...]
-                    { term: "Land Ordinance of 1785", partOfSpeech: "Noun", definition: "A law that set up a standardized system for surveying and distributing western lands.", context: "The Land Ordi[...]
-                    { term: "Northwest Ordinance of 1787", partOfSpeech: "Noun", definition: "A law that established a plan for governing the Northwest Territory and admitting new states to the Union.[...]
-                    { term: "Shays' Rebellion", partOfSpeech: "Noun", definition: "An uprising of farmers in Massachusetts angry about high taxes, which highlighted the weakness of the Articles.", con[...]
-                    { term: "Constitutional Convention", partOfSpeech: "Noun", definition: "The 1787 meeting in Philadelphia where delegates decided to replace the Articles of Confederation with a new[...]
-                    { term: "Compromise", partOfSpeech: "Noun", definition: "A way of reaching an agreement in which each side gives up something it wanted.", context: "The Great Compromise establishe[...]
-                    { term: "Federalist", partOfSpeech: "Noun", definition: "A person who supported a strong national government and the ratification of the Constitution.", context: "Alexander Hamilto[...]
-                    { term: "Anti-Federalist", partOfSpeech: "Noun", definition: "A person who opposed the Constitution because they feared it gave the central government too much power.", context: "A[...]
+                    { term: "Articles of Confederation", partOfSpeech: "Noun", definition: "The first constitution of the United States, which created a weak central government.", context: "Under the Articles of Confederation, the states held most of the power." },
+                    { term: "Confederation", partOfSpeech: "Noun", definition: "A union of states where most political power is retained by the states, with a weak central authority.", context: "The United States operated as a confederation after the Revolutionary War." },
+                    { term: "Ratification", partOfSpeech: "Noun", definition: "The official act of signing or voting for an agreement to make it official.", context: "The ratification of the Articles of Confederation by all thirteen states was required for it to take effect." },
+                    { term: "Shays' Rebellion", partOfSpeech: "Noun", definition: "An uprising of farmers in Massachusetts angry about high taxes, which highlighted the weakness of the Articles.", context: "Shays' Rebellion convinced many leaders that the U.S. needed a stronger central government." },
+                    { term: "Constitutional Convention", partOfSpeech: "Noun", definition: "The 1787 meeting in Philadelphia where delegates decided to replace the Articles of Confederation with a new Constitution.", context: "The Constitutional Convention brought together leaders like George Washington and James Madison." },
                 ]
               }
             ]
@@ -102,65 +124,34 @@
             summary: "This unit breaks down the structure of the U.S. government, the principles it is founded on, and the rights of its citizens.",
             sections: [
               {
-                sectionTitle: "Seven Principles of the Constitution",
-                terms: [
-                  { term: "Popular Sovereignty", partOfSpeech: "Noun", definition: "The idea that the power of the government comes from the people.", context: "The phrase 'We the People' in the Const[...]
-                  { term: "Limited Government", partOfSpeech: "Noun", definition: "The principle that the government's power is restricted by the Constitution and laws.", context: "Limited government [...]
-                  { term: "Republicanism", partOfSpeech: "Noun", definition: "A system of government where citizens elect representatives to make decisions on their behalf.", context: "By voting for m[...]
-                  { term: "Federalism", partOfSpeech: "Noun", definition: "A system of government where power is divided and shared between the central government and state governments.", context: "Un[...]
-                  { term: "Separation of Powers", partOfSpeech: "Noun", definition: "The division of government into three branches (legislative, executive, and judicial), each with its own responsibi[...]
-                  { term: "Checks and Balances", partOfSpeech: "Noun", definition: "A system where each branch of government has the power to limit or 'check' the actions of the other branches.", cont[...]
-                  { term: "Individual Rights", partOfSpeech: "Noun", definition: "The personal freedoms and protections that belong to each person, as outlined in the Bill of Rights.", context: "Freed[...]
-                ]
-              },
-              {
                 sectionTitle: "The Three Branches of Government",
                 terms: [
-                  { term: "Legislative Branch", partOfSpeech: "Noun", definition: "The branch of government that makes laws (Congress).", context: "The Legislative Branch includes the Senate and the H[...]
-                  { term: "Executive Branch", partOfSpeech: "Noun", definition: "The branch of government that carries out and enforces laws, led by the President.", context: "The Executive Branch inc[...]
-                  { term: "Judicial Branch", partOfSpeech: "Noun", definition: "The branch of government that interprets laws and settles disputes, led by the Supreme Court.", context: "The Judicial B[...]
-                  { term: "Bill", partOfSpeech: "Noun", definition: "A proposed law that is introduced in Congress.", context: "For a bill to become a law, it must be passed by both houses of Congress[...]
-                  { term: "Veto", partOfSpeech: "Verb/Noun", definition: "The President's power to reject a bill passed by Congress.", context: "Congress can override a presidential veto with a two-th[...]
-                  { term: "Impeachment", partOfSpeech: "Noun", definition: "The process of charging a government official with serious wrongdoing.", context: "The House of Representatives has the powe[...}
-                  { term: "Cabinet", partOfSpeech: "Noun", definition: "A group of advisors to the President, each heading a different department of the government.", context: "The Secretary of State [...]
-                  { term: "Judicial Review", partOfSpeech: "Noun", definition: "The power of the courts to determine if laws or government actions are constitutional.", context: "The landmark case Mar[...]
-                  { term: "Precedent", partOfSpeech: "Noun", definition: "A court decision that is used as an example in similar future cases.", context: "The Supreme Court's ruling in Brown v. Board [...]
-                  { term: "Enumerated Powers", partOfSpeech: "Noun", definition: "Specific powers granted to the federal government by the Constitution.", context: "The power to declare war and coin m[...]
-                  { term: "Reserved Powers", partOfSpeech: "Noun", definition: "Powers that are kept by the states, as stated in the 10th Amendment.", context: "Establishing local schools is a reserve[...]
-                  { term: "Concurrent Powers", partOfSpeech: "Noun", definition: "Powers shared by both the federal and state governments.", context: "The power to build roads and establish courts are[...]
+                  { term: "Legislative Branch", partOfSpeech: "Noun", definition: "The branch of government that makes laws (Congress).", context: "The Legislative Branch includes the Senate and the House of Representatives." },
+                  { term: "Executive Branch", partOfSpeech: "Noun", definition: "The branch of government that carries out and enforces laws, led by the President.", context: "The Executive Branch includes the President, Vice President, and Cabinet." },
+                  { term: "Judicial Branch", partOfSpeech: "Noun", definition: "The branch of government that interprets laws and settles disputes, led by the Supreme Court.", context: "The Judicial Branch can declare laws unconstitutional through the power of judicial review." },
+                  { term: "Judicial Review", partOfSpeech: "Noun", definition: "The power of the courts to determine if laws or government actions are constitutional.", context: "The landmark case Marbury v. Madison established the principle of judicial review." },
                 ]
               },
               {
                 sectionTitle: "Bill of Rights and Amendments",
                 terms: [
-                  { term: "Bill of Rights", partOfSpeech: "Noun", definition: "The first ten amendments to the U.S. Constitution, which protect the basic rights of citizens.", context: "The Bill of Ri[...]
-                  { term: "Amendment", partOfSpeech: "Noun", definition: "An official change or addition to the Constitution.", context: "The 19th Amendment gave women the right to vote." },
+                  { term: "Bill of Rights", partOfSpeech: "Noun", definition: "The first ten amendments to the U.S. Constitution, which protect the basic rights of citizens.", context: "The Bill of Rights guarantees freedoms like speech, religion, and the right to a fair trial." },
                 ]
               }
             ]
           },
           "Unit 3": {
             title: "Unit 3: The New Republic",
-            summary: "This unit covers the early years of the United States under its new Constitution, focusing on the precedents set by George Washington, the rise of political parties, and the nati[...]
+            summary: "This unit covers the early years of the United States under its new Constitution, focusing on the precedents set by George Washington, the rise of political parties, and the nation's expansion.",
             sections: [
                 {
                     sectionTitle: "Foundations of the New Republic",
                     terms: [
-                        { term: "Political Party", partOfSpeech: "Noun", definition: "An organized group of people with similar ideas who work to get their members elected.", context: "The first polit[...]
-                        { term: "Protective Tariff", partOfSpeech: "Noun", definition: "A tax on imported goods designed to protect a country's industries from foreign competition.", context: "Hamilto[...]
-                        { term: "Neutrality", partOfSpeech: "Noun", definition: "The state of not supporting either side in a conflict.", context: "Washington's Proclamation of Neutrality aimed to kee[...]
-                        { term: "Impressment", partOfSpeech: "Noun", definition: "The act of forcing people to serve in a country's army or navy.", context: "The British navy's impressment of American[...]
-                        { term: "Louisiana Purchase", partOfSpeech: "Noun", definition: "The 1803 acquisition of territory from France that doubled the size of the United States.", context: "The Louis[...]
-                        { term: "War of 1812", partOfSpeech: "Noun", definition: "A war between the United States and Great Britain, sometimes called the 'Second War of Independence.'", context: "The [...]
-                        { term: "Monroe Doctrine", partOfSpeech: "Noun", definition: "A U.S. policy that opposed European colonialism in the Americas.", context: "The Monroe Doctrine warned European n[...]
-                        { term: "Jacksonian Democracy", partOfSpeech: "Noun", definition: "The political movement toward greater democracy for the common man, symbolized by Andrew Jackson.", context: [...]
-                        { term: "Indian Removal Act", partOfSpeech: "Noun", definition: "A law signed by President Andrew Jackson that forced Native American tribes to move from their lands to territo[...]
-                        { term: "Nullification", partOfSpeech: "Noun", definition: "The idea that a state can invalidate a federal law it deems unconstitutional.", context: "The Nullification Crisis w[...]
-                        { term: "Agrarian", partOfSpeech: "Adjective", definition: "Relating to cultivated land or the cultivation of land; concerning farms, farmers, or the use of land.", context: "T[...]
-                        { term: "Laissez-faire", partOfSpeech: "Noun", definition: "An economic policy where the government interferes as little as possible in the economic affairs of individuals and [...]
-                        { term: "Nationalism", partOfSpeech: "Noun", definition: "A strong feeling of pride, loyalty, and devotion to one's country.", context: "A wave of nationalism swept the United [...]
-                        { term: "Sectionalism", partOfSpeech: "Noun", definition: "Loyalty to one's own region or section of the country, rather than to the country as a whole.", context: "Sectionalis[...]
-                        { term: "Spoils System", partOfSpeech: "Noun", definition: "The practice of a successful political party giving public office to its supporters.", context: "President Andrew Ja[...]
+                        { term: "Impressment", partOfSpeech: "Noun", definition: "The act of forcing people to serve in a country's army or navy.", context: "The British navy's impressment of American sailors was a major cause of the War of 1812." },
+                        { term: "Louisiana Purchase", partOfSpeech: "Noun", definition: "The 1803 acquisition of territory from France that doubled the size of the United States.", context: "The Louisiana Purchase gave the U.S. control of the Mississippi River." },
+                        { term: "War of 1812", partOfSpeech: "Noun", definition: "A war between the United States and Great Britain, sometimes called the 'Second War of Independence.'", context: "The defense of Fort McHenry during the War of 1812 inspired the national anthem." },
+                        { term: "Monroe Doctrine", partOfSpeech: "Noun", definition: "A U.S. policy that opposed European colonialism in the Americas.", context: "The Monroe Doctrine warned European nations not to interfere in the Western Hemisphere." },
+                        { term: "Indian Removal Act", partOfSpeech: "Noun", definition: "A law signed by President Andrew Jackson that forced Native American tribes to move from their lands to territory west of the Mississippi River.", context: "The Indian Removal Act led to the tragic journey known as the Trail of Tears." },
                     ]
                 }
             ]
@@ -172,20 +163,12 @@
                 {
                     sectionTitle: "Expansion and Industry",
                     terms: [
-                        { term: "Industrial Revolution", partOfSpeech: "Noun", definition: "A period of major changes in manufacturing that transformed the economy.", context: "The Industrial Revoluti[...]
-                        { term: "Cotton Gin", partOfSpeech: "Noun", definition: "A machine that quickly separated cotton fibers from their seeds.", context: "The invention of the cotton gin greatly in[...]
-                        { term: "Urbanization", partOfSpeech: "Noun", definition: "The process of cities growing and more people moving to live in them.", context: "Urbanization in the North led to ne[...]
-                        { term: "Reform Movement", partOfSpeech: "Noun", definition: "A social movement that aims to make gradual changes in society.", context: "The 1800s saw many reform movements, i[...]
-                        { term: "Abolitionist", partOfSpeech: "Noun", definition: "A person who worked to end slavery.", context: "Famous abolitionists like Frederick Douglass and Harriet Tubman fough[...]
-                        { term: "Manifest Destiny", partOfSpeech: "Noun", definition: "The 19th-century belief that the United States was destined to expand across the continent.", context: "The idea [...]
-                        { term: "Annexation", partOfSpeech: "Noun", definition: "The act of adding new territory to a country.", context: "The annexation of Texas by the United States led to war with [...]
-                        { term: "Mexican-American War", partOfSpeech: "Noun", definition: "A war fought between the U.S. and Mexico from 1846 to 1848 over territory in the Southwest.", context: "As a [...]
-                        { term: "Gold Rush", partOfSpeech: "Noun", definition: "A rapid movement of people to a newly discovered goldfield.", context: "The California Gold Rush of 1849 caused a massiv[...]
-                        { term: "Textile", partOfSpeech: "Noun", definition: "A type of cloth or woven fabric.", context: "The first factories of the Industrial Revolution were textile mills that prod[...]
-                        { term: "Tenement", partOfSpeech: "Noun", definition: "A poorly built, overcrowded apartment building, often found in poor city neighborhoods.", context: "During the Industrial[...]
-                        { term: "Suffrage", partOfSpeech: "Noun", definition: "The right to vote in political elections.", context: "The women's rights movement fought for suffrage for many decades." [...]
-                        { term: "Temperance", partOfSpeech: "Noun", definition: "The movement to encourage moderation or complete abstinence from alcoholic beverages.", context: "The temperance moveme[...]
-                        { term: "Cede", partOfSpeech: "Verb", definition: "To give up power or territory, often as the result of a treaty.", context: "Mexico had to cede a vast amount of territory to [...]
+                        { term: "Industrial Revolution", partOfSpeech: "Noun", definition: "A period of major changes in manufacturing that transformed the economy.", context: "The Industrial Revolution led to the growth of factories and cities in the North." },
+                        { term: "Cotton Gin", partOfSpeech: "Noun", definition: "A machine that quickly separated cotton fibers from their seeds.", context: "The invention of the cotton gin greatly increased the demand for enslaved labor in the South." },
+                        { term: "Abolitionist", partOfSpeech: "Noun", definition: "A person who worked to end slavery.", context: "Famous abolitionists like Frederick Douglass and Harriet Tubman fought to end slavery." },
+                        { term: "Manifest Destiny", partOfSpeech: "Noun", definition: "The 19th-century belief that the United States was destined to expand across the continent.", context: "The idea of Manifest Destiny was used to justify the Mexican-American War." },
+                        { term: "Gold Rush", partOfSpeech: "Noun", definition: "A rapid movement of people to a newly discovered goldfield.", context: "The California Gold Rush of 1849 caused a massive increase in the state's population." },
+                        { term: "Suffrage", partOfSpeech: "Noun", definition: "The right to vote in political elections.", context: "The women's rights movement fought for suffrage for many decades." },
                     ]
                 }
             ]
@@ -194,19 +177,16 @@
 
         const mainContent = document.getElementById('main-content');
         const unitList = document.getElementById('unit-list');
+        const wordWallBtn = document.getElementById('word-wall-btn');
+        const aiWordWallBtn = document.getElementById('ai-word-wall-btn');
         let currentUnit = Object.keys(vocabularyData)[0];
 
         // --- Functions to Render Content ---
 
-        // Function to display the vocabulary for a selected unit
         function showUnit(unitKey) {
             currentUnit = unitKey;
             const unitData = vocabularyData[unitKey];
-            
-            // Clear previous content
             mainContent.innerHTML = '';
-            
-            // Update sidebar button styles
             updateSidebar();
 
             if (!unitData) {
@@ -214,35 +194,20 @@
                 return;
             }
 
-            // Add the American History banner image above the unit header
-            // Image stored in repository under files/AmHistoryBanner.png
-            const bannerWrap = document.createElement('div');
-            bannerWrap.className = 'mb-6';
-            bannerWrap.innerHTML = `
-                <img
-                    src="assets/AmHistoryBanner.png"
-                    alt="Welcome to American History banner"
-                    class="w-full h-40 sm:h-44 md:h-48 object-cover rounded-xl shadow-md"
-                />
-            `;
-            mainContent.appendChild(bannerWrap);
-
-            // Create and append the header
             const header = document.createElement('header');
-            header.className = 'mb-8 border-b border-slate-700 pb-4';
+            header.className = 'mb-8 border-b-2 border-gray-700 pb-4';
             header.innerHTML = `
-                <h2 class="text-4xl font-extrabold text-slate-100">${unitData.title}</h2>
-                <p class="text-lg text-slate-400 mt-2 max-w-3xl">${unitData.summary}</p>
+                <h2 class="text-4xl font-extrabold text-white">${unitData.title}</h2>
+                <p class="text-lg text-gray-400 mt-2">${unitData.summary}</p>
             `;
             mainContent.appendChild(header);
 
-            // Create and append sections and terms
             unitData.sections.forEach(section => {
                 const sectionEl = document.createElement('section');
                 sectionEl.className = 'mb-10';
                 
                 const sectionTitle = document.createElement('h3');
-                sectionTitle.className = 'text-2xl md:text-3xl font-semibold text-sky-400 mb-6';
+                sectionTitle.className = 'text-3xl font-semibold text-blue-400 mb-6';
                 sectionTitle.textContent = section.sectionTitle;
                 sectionEl.appendChild(sectionTitle);
 
@@ -251,13 +216,13 @@
 
                 section.terms.forEach(term => {
                     const card = document.createElement('div');
-                    card.className = 'bg-slate-800 p-6 rounded-2xl shadow-xl flex flex-col border border-slate-700';
+                    card.className = 'bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col';
                     card.innerHTML = `
-                        <h4 class="text-xl font-bold text-slate-100 mb-1">${term.term}</h4>
-                        <p class="text-sm text-slate-400 italic mb-3">${term.partOfSpeech}</p>
-                        <p class="text-slate-300 mb-4 flex-grow leading-relaxed">${term.definition}</p>
-                        <p class="text-slate-300 text-sm bg-slate-700 p-3 rounded-md">
-                            <span class="font-semibold text-slate-200">Context:</span> ${term.context}
+                        <h4 class="text-xl font-bold text-white">${term.term}</h4>
+                        <p class="text-sm text-gray-400 italic mb-3">${term.partOfSpeech}</p>
+                        <p class="text-gray-300 mb-4 flex-grow">${term.definition}</p>
+                        <p class="text-gray-400 text-sm bg-gray-700 p-3 rounded-md">
+                            <span class="font-bold">Context:</span> ${term.context}
                         </p>
                     `;
                     grid.appendChild(card);
@@ -266,65 +231,134 @@
                 sectionEl.appendChild(grid);
                 mainContent.appendChild(sectionEl);
             });
-
-            // Ensure focus moves to the top of content for keyboard users
-            header.querySelector('h2').setAttribute('tabindex', '-1');
-            header.querySelector('h2').focus();
         }
 
-        // Function to update the active state of sidebar buttons
+        function showWordWall(useAiImages = false, generatedImages = null) {
+            const unitData = vocabularyData[currentUnit];
+            mainContent.innerHTML = '';
+
+            const header = document.createElement('header');
+            header.className = 'mb-8 border-b-2 border-gray-700 pb-4';
+            header.innerHTML = `<h2 class="text-4xl font-extrabold text-white">Word Wall: ${unitData.title}</h2>`;
+            mainContent.appendChild(header);
+
+            const container = document.createElement('div');
+            container.className = 'space-y-4';
+
+            let termIndex = 0;
+            unitData.sections.forEach(section => {
+                section.terms.forEach(term => {
+                    const card = document.createElement('div');
+                    card.className = 'word-wall-card bg-white text-gray-800 p-4 rounded-lg shadow-lg border-4 border-blue-500';
+                    const placeholderUrl = `https://placehold.co/400x300/e2e8f0/64748b?text=Image`;
+                    
+                    let imageUrl = placeholderUrl;
+                    if (useAiImages && generatedImages && generatedImages[term.term]) {
+                        imageUrl = generatedImages[term.term];
+                    }
+
+                    card.innerHTML = `
+                        <div class="text-center bg-blue-500 text-white font-bold text-4xl py-2 rounded-t-md -mx-4 -mt-4 mb-4">
+                            ${term.term.toUpperCase()}
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2/3 text-lg">
+                                ${term.definition}
+                            </div>
+                            <div class="w-1/3">
+                                <img src="${imageUrl}" alt="Historical image related to ${term.term}" class="rounded-md border border-gray-300 object-cover h-40 w-full" onerror="this.onerror=null;this.src='${placeholderUrl}';">
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                    termIndex++;
+                });
+            });
+            mainContent.appendChild(container);
+        }
+
+        async function generateAiImagesAndShowWordWall() {
+            mainContent.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-white">
+                    <div class="loader mb-4"></div>
+                    <p class="text-xl">Generating AI images for your word wall...</p>
+                    <p class="text-gray-400">This may take a moment.</p>
+                </div>`;
+
+            const unitData = vocabularyData[currentUnit];
+            const allTerms = unitData.sections.flatMap(s => s.terms);
+            const generatedImages = {};
+
+            for (const term of allTerms) {
+                const prompt = `A historical illustration suitable for a 7th-grade classroom word wall, representing the concept of '${term.term}'. Style: simple, clear, historical engraving or drawing.`;
+                
+                try {
+                    const apiKey = ""; // API key is handled by the environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    const payload = {
+                        instances: [{ prompt: prompt }],
+                        parameters: { "sampleCount": 1 }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                        generatedImages[term.term] = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    } else {
+                         generatedImages[term.term] = null; // Mark as failed
+                    }
+                } catch (error) {
+                    console.error(`Error generating image for ${term.term}:`, error);
+                    generatedImages[term.term] = null; // Mark as failed
+                }
+            }
+            
+            showWordWall(true, generatedImages);
+        }
+
         function updateSidebar() {
             const buttons = unitList.querySelectorAll('button');
             buttons.forEach(button => {
                 if (button.dataset.unit === currentUnit) {
-                    button.className = 'w-full text-left p-3 rounded-lg transition-colors duration-200 bg-sky-600 text-white font-semibold';
-                    button.setAttribute('aria-current', 'true');
+                    button.className = 'w-full text-left p-3 rounded-lg transition-colors duration-200 bg-blue-600 font-bold';
                 } else {
-                    button.className = 'w-full text-left p-3 rounded-lg transition-colors duration-200 hover:bg-slate-700 text-slate-100';
-                    button.removeAttribute('aria-current');
+                    button.className = 'w-full text-left p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700';
                 }
             });
         }
         
-        // --- Initial Page Load ---
-
-        // Function to populate the sidebar with unit buttons
         function populateSidebar() {
-            // Clear any previous entries (fixes duplicates if this runs more than once)
-            unitList.innerHTML = '';
-
-            // Use a Set to guarantee uniqueness just in case the data has duplicate keys
-            const seen = new Set();
-
             Object.keys(vocabularyData).forEach(unitKey => {
-                if (seen.has(unitKey)) return;
-                seen.add(unitKey);
-
                 const li = document.createElement('li');
-                li.className = '';
-
+                li.className = 'mb-2';
+                
                 const button = document.createElement('button');
-                button.type = 'button';
                 button.textContent = unitKey;
-                button.dataset.unit = unitKey; // Store unit key for identification
+                button.dataset.unit = unitKey;
                 button.onclick = () => showUnit(unitKey);
-
-                // Initial styling; updateSidebar() will adjust the active one after showUnit runs
-                button.className = 'w-full text-left p-3 rounded-lg transition-colors duration-200 hover:bg-slate-700';
-
+                
                 li.appendChild(button);
                 unitList.appendChild(li);
             });
         }
 
-        // When the DOM is fully loaded, populate the sidebar and show the first unit
+        wordWallBtn.addEventListener('click', () => showWordWall(false));
+        aiWordWallBtn.addEventListener('click', generateAiImagesAndShowWordWall);
+
         document.addEventListener('DOMContentLoaded', () => {
             populateSidebar();
             showUnit(currentUnit);
         });
 
-        // Optional: if you ever append the sidebar again from other scripts you can safely call populateSidebar()
-        // because it clears the list first, preventing duplicates.
     </script>
 </body>
 </html>
